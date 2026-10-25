@@ -44,38 +44,37 @@ let seat = [];
 const container = document.getElementById("films-container")
 container.innerHTML = "";
 films.forEach(film => {
-//   const article = document.createElement("article");
-//   article.dataset.filmId = film.id;
-//   article.classList.add("overflow-hidden", "rounded-2xl", "border", "border-slate-200", "bg-white", "shadow-lg", "p-5")
-//   const genre = document.createElement("genre")
-//   genre.textContent = film.genre;
-//   genre.classList.add("text-xs", "font-bold", "uppercase", "tracking-wider", "text-cine-red")
-//   const img = document.createElement("img");
-//   img.src = film.affiche;
-//   img.alt = film.titre;
-//   img.classList.add("aspect-[2/3]", "w-full", "object-cover")
-//   const titre = document.createElement("h3");
-//   titre.textContent = film.titre;
-//   titre.classList.add("mt-1", "text-lg", "font-black")
-//   const time = document.createElement("time");
-//   time.textContent = (film.duree / 60).toFixed(0) + "h " + (film.duree % 60).toFixed(0) + " min"
-//   time.classList.add("mt-2", "text-sm", "text-slate-500")
-//   const button = document.createElement("button");
-//   button.textContent = "Choisir ce film";
-//   button.dataset.filmId = film.id;
-//   button.classList.add("mt-4", "w-full", "rounded-xl", "border", "border-slate-300", "bg-slate-50", "px-4", "py-3", "font-extrabold", "text-slate-700")
-//   article.append(img, genre, titre, time, button);
-//   container.appendChild(article);
+  //   const article = document.createElement("article");
+  //   article.dataset.filmId = film.id;
+  //   article.classList.add("overflow-hidden", "rounded-2xl", "border", "border-slate-200", "bg-white", "shadow-lg", "p-5")
+  //   const genre = document.createElement("genre")
+  //   genre.textContent = film.genre;
+  //   genre.classList.add("text-xs", "font-bold", "uppercase", "tracking-wider", "text-cine-red")
+  //   const img = document.createElement("img");
+  //   img.src = film.affiche;
+  //   img.alt = film.titre;
+  //   img.classList.add("aspect-[2/3]", "w-full", "object-cover")
+  //   const titre = document.createElement("h3");
+  //   titre.textContent = film.titre;
+  //   titre.classList.add("mt-1", "text-lg", "font-black")
+  //   const time = document.createElement("time");
+  //   time.textContent = (film.duree / 60).toFixed(0) + "h " + (film.duree % 60).toFixed(0) + " min"
+  //   time.classList.add("mt-2", "text-sm", "text-slate-500")
+  //   const button = document.createElement("button");
+  //   button.textContent = "Choisir ce film";
+  //   button.dataset.filmId = film.id;
+  //   button.classList.add("mt-4", "w-full", "rounded-xl", "border", "border-slate-300", "bg-slate-50", "px-4", "py-3", "font-extrabold", "text-slate-700")
+  //   article.append(img, genre, titre, time, button);
+  //   container.appendChild(article);
   container.innerHTML += `
   <article class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg" data-film-id="3">
         <div class="relative">
           <img src="${film.affiche}" alt="${film.titre}" class="aspect-[2/3] w-full object-cover">
           <span class="absolute bottom-3 right-3 rounded-full bg-white/95 px-3 py-1 text-xs font-extrabold shadow-lg">${film.prix} DH</span></div>
-        <div class="p-4"><p class="text-xs font-bold uppercase tracking-wider text-cine-red">${film.genre}</p><h3 class="mt-1 text-lg font-black">${film.titre}</h3><p class="mt-2 text-sm text-slate-500">1 h 56 min</p><button type="button" class="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 font-extrabold text-slate-700">Choisir ce film</button></div>
+        <div class="p-4"><p class="text-xs font-bold uppercase tracking-wider text-cine-red">${film.genre}</p><h3 class="mt-1 text-lg font-black">${film.titre}</h3><p class="mt-2 text-sm text-slate-500">${((film.duree / 60).toFixed(0))}h ${((film.duree % 60).toFixed(0))}min</p><button type="button" class="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 font-extrabold text-slate-700">Choisir ce film</button></div>
       </article>
   `
 });
-
 
 // ==================================================
 // US02 - SÉLECTIONNER UN FILM
@@ -92,16 +91,43 @@ document.querySelectorAll("button").forEach(button => {
   button.addEventListener('click', () => {
     button.classList.toggle("bg-red-500")
 
-    if(button.textContent === "Sélectioner"){
+    if (button.textContent === "Sélectioné") {
       button.textContent = "Choisir ce film"
     }
-    else{
-      button.textContent = "Sélectioner"
+    else {
+      button.textContent = "Sélectioné"
     }
   });
 });
 
+let filmsSelected = []
+function showSelectedMovie() {
+  const details = document.getElementById("film-details")
+  details.innerHTML = ""
+  console.log(film.id)
+  console.log(filmsSelected)
+  films.forEach(film => {
+    if (filmsSelected.includes(film.id)) {
+      details.innerHTML +=
+              `<img src="${film.affiche}" alt="${film.titre}" class="aspect-[2/3] w-24 rounded-xl object-cover shadow-md">
+              <div><div class="flex flex-wrap items-center gap-2"><h3 class="text-xl font-black">"${film.titre}"</h3><span class="rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700">${film.prix} DH</span></div><p class="mt-2 text-sm font-semibold text-slate-500">${film.genre} · ${(film.duree / 60).toFixed(0)}h ${(film.duree % 60).toFixed(0)}min</p><p class="mt-3 leading-7 text-slate-600">${film.description}</p></div>`
+    }
+  })
+}
 
+document.querySelectorAll(".button").forEach(button => {
+  button.addEventListener("click", eve => {
+    let num = Number(eve.currentTarget.id)
+    if (filmsSelected.includes(id)) {
+      filmsSelected.splice(filmsSelected.indexOf(num), 1)
+      showSelectedMovie()
+    }
+    else {
+      filmsSelected.push(num)
+      showSelectedMovie();
+    }
+  });
+});
 // ==================================================
 // US03 - AFFICHER LES SÉANCES
 // ==================================================
